@@ -26,7 +26,7 @@ SECRET_KEY = '6-luy387(hu&n!rij&%&---q+7esrwd8c=ozq5q#8y(ze6qh+('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['https://my-movie-booking.herokuapp.com/movie']
 
 
 # Application definition
@@ -65,10 +65,10 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
-CORS_ORIGIN_WHITELIST = [
-    'https://localhost:3000',
-    'http://localhost:3000'
-]
+# CORS_ORIGIN_WHITELIST = [
+#     'https://localhost:3000',
+#     'http://localhost:3000'
+# ]
 # CORS_ORIGIN_WHITELIST = (
 #   'https://app-movie-genre-service.herokuapp.com',
 # )
