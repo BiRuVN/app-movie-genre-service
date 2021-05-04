@@ -26,7 +26,7 @@ SECRET_KEY = '6-luy387(hu&n!rij&%&---q+7esrwd8c=ozq5q#8y(ze6qh+('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['app-movie-genre-service.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -58,7 +58,6 @@ MIDDLEWARE = [
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ORIGIN_ALLOW_ALL = True
-ROOT_URLCONF = 'MovieService.urls'
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = [
     'DELETE',
@@ -72,6 +71,8 @@ CORS_ALLOW_METHODS = [
 # CORS_ORIGIN_WHITELIST = (
 #   'https://app-movie-genre-service.herokuapp.com',
 # )
+
+ROOT_URLCONF = 'MovieService.urls'
 
 TEMPLATES = [
     {
