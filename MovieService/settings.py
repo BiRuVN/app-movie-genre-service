@@ -60,7 +60,14 @@ MIDDLEWARE = [
 CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'MovieService.urls'
 CORS_ALLOW_CREDENTIALS = True
-
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 # CORS_ORIGIN_WHITELIST = (
 #   'https://app-movie-genre-service.herokuapp.com',
 # )
