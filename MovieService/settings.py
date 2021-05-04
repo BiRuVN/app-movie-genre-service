@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'MovieService.middleware.open_access_middleware',
 ]
 
 ROOT_URLCONF = 'MovieService.urls'
