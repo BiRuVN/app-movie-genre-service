@@ -139,9 +139,6 @@ def get_genre(request):
             data.append(dict(zip(fields, genre)))
         return JsonResponse({'data' : data})
 
-        # all_genre = serialize(Genre.objects.all(), fields=('_id', 'genre_name'))
-        # return JsonResponse({'data' : [x['fields'] for x in all_genre]})
-
 # Create genre
 def add_genre(request):
     if request.method == 'POST':
@@ -168,9 +165,14 @@ def update_genre(request):
                 'message': 'No genre selected'
             }, status=status.HTTP_200_OK)
         
-        genre = Genre.objects.get(_id=_id)
-        genre.genre_name = body['genre_name']
-        genre.save()
+        try:
+            genre = Genre.objects.get(_id=_id)
+            genre.genre_name = body['genre_name']
+            genre.save()
+        except:
+            return JsonResponse({
+                'message': 'No genre existed'
+            }, status=status.HTTP_200_OK)
 
         return JsonResponse({
             'message': 'Update genre successfully'
@@ -188,7 +190,12 @@ def create_movie_genre(request):
                 'message': 'Missing key to create movie_genre'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        movie_genre = Movie_Genre.objects.create(movie_id=movie_id, genre_id=genre_id)
+        try:
+            movie_genre = Movie_Genre.objects.create(movie_id=movie_id, genre_id=genre_id)
+        except:
+            return JsonResponse({
+                'message': 'Missing key to create genre'
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         return JsonResponse({
             'message': 'Add movie_genre successfully'
