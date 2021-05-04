@@ -130,8 +130,17 @@ def update_movie(request):
 # Get genre
 def get_genre(request):
     if request.method == 'GET':
-        all_genre = serialize(Genre.objects.all(), fields=('_id', 'genre_name'))
-        return JsonResponse({'data' : [x['fields'] for x in all_genre]})
+        fields = ['id', 'genre_name']
+        statement = "SELECT * FROM movie_app_genre"
+
+        all_genre = run_sql(statement)        
+        data = []
+        for genre in all_genre:
+            data.append(dict(zip(fields, genre)))
+        return JsonResponse({'data' : data})
+
+        # all_genre = serialize(Genre.objects.all(), fields=('_id', 'genre_name'))
+        # return JsonResponse({'data' : [x['fields'] for x in all_genre]})
 
 # Create genre
 def add_genre(request):
