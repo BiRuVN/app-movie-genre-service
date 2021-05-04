@@ -45,8 +45,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'MovieService.middleware.open_access_middleware',
+    # 'django.middleware.common.CommonMiddleware',
+    # 'MovieService.middleware.open_access_middleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -57,9 +57,13 @@ MIDDLEWARE = [
     
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'MovieService.urls'
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ORIGIN_WHITELIST = (
+#   'https://app-movie-genre-service.herokuapp.com',
+# )
 
 TEMPLATES = [
     {
