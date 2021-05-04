@@ -127,13 +127,13 @@ def update_movie(request):
         }, status=status.HTTP_200_OK)
 
 # Get gerne
-def get_gerne(request):
+def get_genre(request):
     if request.method == 'GET':
         all_gerne = serialize(Gerne.objects.all(), fields=('genre_name'))
         return JsonResponse({'data' : [x['fields'] for x in all_gerne]})
 
 # Create gerne
-def add_gerne(request):
+def add_genre(request):
     if request.method == 'POST':
         body = json.loads(request.body)
         try:
@@ -148,7 +148,7 @@ def add_gerne(request):
         }, status=status.HTTP_201_CREATED)
 
 # Update gerne
-def update_gerne(request):
+def update_genre(request):
     if request.method == 'POST':
         body = json.loads(request.body)
         _id = body['id']
@@ -167,7 +167,7 @@ def update_gerne(request):
         }, status=status.HTTP_200_OK)
 
 # Create movie_gerne
-def create_movie_gerne(request):
+def create_movie_genre(request):
     if request.method == 'POST':
         body = json.loads(request.body)
         try:
