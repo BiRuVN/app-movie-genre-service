@@ -7,8 +7,8 @@ class Movie(models.Model):
     duration = models.IntegerField()
     release_date = models.CharField(max_length=20)
     description = models.TextField(max_length=1024)
-    poster = models.CharField(max_length=50)
-    trailer = models.CharField(max_length=50)
+    poster = models.TextField(max_length=50)
+    trailer = models.TextField(max_length=50)
 
     def __str__(self):
         return self.name
