@@ -126,28 +126,28 @@ def update_movie(request):
             'message': 'Update movie successfully'
         }, status=status.HTTP_200_OK)
 
-# Get gerne
+# Get genre
 def get_genre(request):
     if request.method == 'GET':
-        all_gerne = serialize(Gerne.objects.all(), fields=('genre_name'))
-        return JsonResponse({'data' : [x['fields'] for x in all_gerne]})
+        all_genre = serialize(genre.objects.all(), fields=('genre_name'))
+        return JsonResponse({'data' : [x['fields'] for x in all_genre]})
 
-# Create gerne
+# Create genre
 def add_genre(request):
     if request.method == 'POST':
         body = json.loads(request.body)
         try:
-            gerne = Gerne.objects.create(genre_name=body['genre_name'])
+            genre = Genre.objects.create(genre_name=body['genre_name'])
         except KeyError:
             return JsonResponse({
-                'message': 'Missing key to create gerne'
+                'message': 'Missing key to create genre'
             }, status=status.HTTP_400_BAD_REQUEST)
 
         return JsonResponse({
-            'message': 'Add successfully gerne'
+            'message': 'Add successfully genre'
         }, status=status.HTTP_201_CREATED)
 
-# Update gerne
+# Update genre
 def update_genre(request):
     if request.method == 'POST':
         body = json.loads(request.body)
@@ -155,32 +155,32 @@ def update_genre(request):
         print(_id)
         if _id is None:
             return JsonResponse({
-                'message': 'No gerne selected'
+                'message': 'No genre selected'
             }, status=status.HTTP_200_OK)
         
-        gerne = Gerne.objects.get(_id=_id)
-        gerne.genre_name = body['genre_name']
-        gerne.save()
+        genre = Genre.objects.get(_id=_id)
+        genre.genre_name = body['genre_name']
+        genre.save()
 
         return JsonResponse({
-            'message': 'Update gerne successfully'
+            'message': 'Update genre successfully'
         }, status=status.HTTP_200_OK)
 
-# Create movie_gerne
+# Create movie_genre
 def create_movie_genre(request):
     if request.method == 'POST':
         body = json.loads(request.body)
         try:
             movie_id = body['movie_id']
-            gerne_id = body['gerne_id']
+            genre_id = body['genre_id']
         except KeyError:
             return JsonResponse({
-                'message': 'Missing key to create movie_gerne'
+                'message': 'Missing key to create movie_genre'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        movie_gerne = Movie_Gerne.objects.create(movie_id=movie_id, gerne_id=gerne_id)
+        movie_genre = Movie_Genre.objects.create(movie_id=movie_id, genre_id=genre_id)
 
         return JsonResponse({
-            'message': 'Add movie_gerne successfully'
+            'message': 'Add movie_genre successfully'
         }, status=status.HTTP_201_CREATED)
         
