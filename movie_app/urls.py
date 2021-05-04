@@ -12,6 +12,7 @@ urlpatterns = [
     path('genre/', get_genre),
     path('genre/new', csrf_exempt(add_genre)),
     path('genre/update', csrf_exempt(update_genre)),
+    
     path('movie_genre/add', csrf_exempt(create_movie_genre))
     
 ]
