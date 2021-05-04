@@ -34,7 +34,8 @@ def get_movie(request):
                     FROM ((movie_app_movie_genre \
                         FULL JOIN movie_app_genre ON movie_app_movie_genre.genre_id_id = movie_app_genre._id) \
                             FULL JOIN movie_app_movie ON movie_app_movie_genre.movie_id_id = movie_app_movie._id) \
-                                GROUP BY {}, {}, {}'.format("_id", *fields, *fields[:-1])
+                                WHERE movie_app_movie._id IS NOT NULL \
+                                    GROUP BY {}, {}, {}'.format(*fields, *fields[:-1])
                                 
         else:
             fields = ['movie_name', 'duration', 'poster', 'release_date', 'trailer', 'description', 'genre_name']
