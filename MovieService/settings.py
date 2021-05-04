@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ORIGIN_ALLOW_ALL = True
 ROOT_URLCONF = 'MovieService.urls'
 CORS_ALLOW_CREDENTIALS = True
@@ -68,6 +68,7 @@ CORS_ALLOW_METHODS = [
     'POST',
     'PUT',
 ]
+
 # CORS_ORIGIN_WHITELIST = (
 #   'https://app-movie-genre-service.herokuapp.com',
 # )
