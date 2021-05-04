@@ -130,7 +130,7 @@ def update_movie(request):
 # Get genre
 def get_genre(request):
     if request.method == 'GET':
-        all_genre = serialize(Genre.objects.all(), fields=('genre_name'))
+        all_genre = serialize(Genre.objects.all(), fields=('_id', 'genre_name'))
         return JsonResponse({'data' : [x['fields'] for x in all_genre]})
 
 # Create genre
