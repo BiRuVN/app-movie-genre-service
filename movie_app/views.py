@@ -191,7 +191,7 @@ def create_movie_genre(request):
             }, status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            movie_genre = Movie_Genre.objects.create(movie_id=movie_id, genre_id=genre_id)
+            movie_genre = Movie_Genre.objects.create(movie_id=Movie(_id=movie_id), genre_id=Genre(_id=genre_id))
         except:
             return JsonResponse({
                 'message': 'Missing key to create genre'
