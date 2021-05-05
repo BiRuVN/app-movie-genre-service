@@ -9,6 +9,8 @@ class Movie(models.Model):
     description = models.TextField(max_length=1024)
     poster = models.TextField(max_length=50)
     trailer = models.TextField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -16,6 +18,8 @@ class Movie(models.Model):
 class Genre(models.Model):
     _id = models.AutoField(primary_key=True, null=False)
     genre_name = models.CharField(max_length=50, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -24,6 +28,8 @@ class Movie_Genre(models.Model):
     _id = models.AutoField(primary_key=True, null=False)
     movie_id = models.ForeignKey(Movie, on_delete=models.CASCADE, null=False)
     genre_id = models.ForeignKey(Genre, on_delete=models.CASCADE, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ['movie_id', 'genre_id']
