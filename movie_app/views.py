@@ -7,6 +7,7 @@ import rest_framework
 import ast
 import json
 from django.db import connection
+import requests
 
 def run_sql(statement):
     with connection.cursor() as cursor:
@@ -55,6 +56,7 @@ def get_movie(request):
 def add_movie(request):
     if request.method == 'POST':
         body = json.loads(request.body)
+        genres = body['genre_ids']
         try:
             movie = Movie.objects.create(
                 movie_name=body['movie_name'], duration=body['duration'], poster=body['poster'],
@@ -74,38 +76,46 @@ def add_movie(request):
                 'message': 'Add movie unsuccessfully'
             }, status=status.HTTP_400_BAD_REQUEST)
 
+        try:
+            for genre_id in genres:
+                Movie_Genre.objects.create(movie_id=Movie(_id=movie._id), genre_id=Genre(_id=genre_id))
+        except:
+            return JsonResponse({
+                'message': 'Problem occurred when add genre to movie'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         return JsonResponse({
             'message': 'Add movie successfully'
         }, status=status.HTTP_201_CREATED)
 
 # Delete movie
-def del_movie(request):
-    if request.method == 'POST':
-        body = json.loads(request.body)
-        _id = body['id']
-        print(_id)
-        if _id is None:
-            return JsonResponse({
-                'message': 'No movie deleted'
-            }, status=status.HTTP_400_BAD_REQUEST)
+# def del_movie(request):
+#     if request.method == 'POST':
+#         body = json.loads(request.body)
+#         _id = body['id']
+#         print(_id)
+#         if _id is None:
+#             return JsonResponse({
+#                 'message': 'No movie deleted'
+#             }, status=status.HTTP_400_BAD_REQUEST)
         
-        del_status = Movie.objects.filter(_id=_id).delete()
-        # print(del_status)
-        try:
-            return JsonResponse({
-                'message': '{} movie deleted'.format(del_status[1]['movie_app.Movie'])
-            }, status=status.HTTP_200_OK)
-        except KeyError:
-             return JsonResponse({
-                'message': 'No movie available to be deleted'
-            }, status=status.HTTP_400_BAD_REQUEST)
+#         del_status = Movie.objects.filter(_id=_id).delete()
+#         # print(del_status)
+#         try:
+#             return JsonResponse({
+#                 'message': '{} movie deleted'.format(del_status[1]['movie_app.Movie'])
+#             }, status=status.HTTP_200_OK)
+#         except KeyError:
+#              return JsonResponse({
+#                 'message': 'No movie available to be deleted'
+#             }, status=status.HTTP_400_BAD_REQUEST)
 
 # Update movie
 def update_movie(request):
     if request.method == 'POST':
         body = json.loads(request.body)
         _id = body['id']
-        # print(_id)
+        genres = body['genre_ids']
         if _id is None:
             return JsonResponse({
                 'message': 'No movie selected'
@@ -126,6 +136,21 @@ def update_movie(request):
             movie.trailer = body['trailer']
             movie.release_date = body['release_date']
             movie.save()
+            
+            try:
+                Movie_Genre.objects.filter(movie_id=_id).delete()
+            except:
+                return JsonResponse({
+                    'message': 'Problems occurred when delete old genres of movie'
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                for genre_id in genres:
+                    Movie_Genre.objects.create(movie_id=Movie(_id=_id), genre_id=Genre(_id=genre_id))
+            except:
+                return JsonResponse({
+                    'message': 'Problem occurred when add genre to movie'
+                }, status=status.HTTP_400_BAD_REQUEST)
 
             return JsonResponse({
                 'message': 'Update movie successfully'
@@ -187,25 +212,25 @@ def update_genre(request):
         }, status=status.HTTP_200_OK)
 
 # Create movie_genre
-def create_movie_genre(request):
-    if request.method == 'POST':
-        body = json.loads(request.body)
-        try:
-            movie_id = body['movie_id']
-            genre_id = body['genre_id']
-        except KeyError:
-            return JsonResponse({
-                'message': 'Missing key to create movie_genre'
-            }, status=status.HTTP_400_BAD_REQUEST)
+# def create_movie_genre(request):
+#     if request.method == 'POST':
+#         body = json.loads(request.body)
+#         try:
+#             movie_id = body['movie_id']
+#             genre_id = body['genre_id']
+#         except KeyError:
+#             return JsonResponse({
+#                 'message': 'Missing key to create movie_genre'
+#             }, status=status.HTTP_400_BAD_REQUEST)
         
-        try:
-            movie_genre = Movie_Genre.objects.create(movie_id=Movie(_id=movie_id), genre_id=Genre(_id=genre_id))
-        except:
-            return JsonResponse({
-                'message': 'Missing key to create genre'
-            }, status=status.HTTP_400_BAD_REQUEST)
+#         try:
+#             movie_genre = Movie_Genre.objects.create(movie_id=Movie(_id=movie_id), genre_id=Genre(_id=genre_id))
+#         except:
+#             return JsonResponse({
+#                 'message': 'Missing key to create genre'
+#             }, status=status.HTTP_400_BAD_REQUEST)
 
-        return JsonResponse({
-            'message': 'Add movie_genre successfully'
-        }, status=status.HTTP_201_CREATED)
+#         return JsonResponse({
+#             'message': 'Add movie_genre successfully'
+#         }, status=status.HTTP_201_CREATED)
         

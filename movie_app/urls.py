@@ -6,7 +6,7 @@ urlpatterns = [
     # path('', ),
     path('movie/', get_movie),
     path('movie/new', csrf_exempt(add_movie)),
-    path('movie/del', csrf_exempt(del_movie)),
+    # path('movie/del', csrf_exempt(del_movie)),
     path('movie/update', csrf_exempt(update_movie)),
 
     path('genre/', get_genre),
