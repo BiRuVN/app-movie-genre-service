@@ -36,14 +36,14 @@ def get_movie(request):
                             FULL JOIN movie_app_movie ON movie_app_movie_genre.movie_id_id = movie_app_movie._id) \
                                 WHERE movie_app_movie._id IS NOT NULL \
                                     GROUP BY {}, {}, {}, {}, {}'.format("movie_app_movie._id", *fields[1:], *fields[1:-1], "movie_app_movie._id")
-                                
-        fields = ['movie_id', 'movie_name', 'duration', 'poster', 'release_date', 'trailer', 'description', 'genre_name']
-        statement = 'SELECT {}, {}, {}, {}, {}, {}, {}, array_agg({}) \
-                FROM ((movie_app_movie_genre \
-                    FULL JOIN movie_app_genre ON movie_app_movie_genre.genre_id_id = movie_app_genre._id) \
-                        FULL JOIN movie_app_movie ON movie_app_movie_genre.movie_id_id = movie_app_movie._id) \
-                            WHERE movie_app_movie._id={} \
-                            GROUP BY {}, {}, {}, {}, {}, {}, {}'.format("movie_app_movie._id", *fields[1:], str(_id), *fields[1:-1], "movie_app_movie._id")
+        else:
+            fields = ['movie_id', 'movie_name', 'duration', 'poster', 'release_date', 'trailer', 'description', 'genre_name']
+            statement = 'SELECT {}, {}, {}, {}, {}, {}, {}, array_agg({}) \
+                    FROM ((movie_app_movie_genre \
+                        FULL JOIN movie_app_genre ON movie_app_movie_genre.genre_id_id = movie_app_genre._id) \
+                            FULL JOIN movie_app_movie ON movie_app_movie_genre.movie_id_id = movie_app_movie._id) \
+                                WHERE movie_app_movie._id={} \
+                                GROUP BY {}, {}, {}, {}, {}, {}, {}'.format("movie_app_movie._id", *fields[1:], str(_id), *fields[1:-1], "movie_app_movie._id")
 
         all_movies = run_sql(statement)        
         data = []
