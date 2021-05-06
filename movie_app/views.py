@@ -49,7 +49,7 @@ def get_movie(request):
         data = []
         for movie in all_movies:
             data.append(dict(zip(fields, movie)))
-        return JsonResponse({'data' : data})
+        return JsonResponse({'data' : data}, status=status.HTTP_200_OK)
         
 # Create movie
 def add_movie(request):
@@ -63,6 +63,10 @@ def add_movie(request):
         except KeyError:
             return JsonResponse({
                 'message': 'Missing key to create'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return JsonResponse({
+                'message': 'Duplicated records'
             }, status=status.HTTP_400_BAD_REQUEST)
 
         if movie is None:
@@ -83,7 +87,7 @@ def del_movie(request):
         if _id is None:
             return JsonResponse({
                 'message': 'No movie deleted'
-            }, status=status.HTTP_200_OK)
+            }, status=status.HTTP_400_BAD_REQUEST)
         
         del_status = Movie.objects.filter(_id=_id).delete()
         # print(del_status)
@@ -94,7 +98,7 @@ def del_movie(request):
         except KeyError:
              return JsonResponse({
                 'message': 'No movie available to be deleted'
-            }, status=status.HTTP_200_OK)
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 # Update movie
 def update_movie(request):
@@ -105,26 +109,31 @@ def update_movie(request):
         if _id is None:
             return JsonResponse({
                 'message': 'No movie selected'
-            }, status=status.HTTP_200_OK)
+            }, status=status.HTTP_400_BAD_REQUEST)
         
         try:
             movie = Movie.objects.get(_id=_id)
         except:
             return JsonResponse({
                 'message': 'No available movie to be updated'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            movie.movie_name = body['movie_name']
+            movie.duration = body['duration']
+            movie.poster = body['poster']
+            movie.description = body['description']
+            movie.trailer = body['trailer']
+            movie.release_date = body['release_date']
+            movie.save()
+
+            return JsonResponse({
+                'message': 'Update movie successfully'
             }, status=status.HTTP_200_OK)
-
-        movie.movie_name = body['movie_name']
-        movie.duration = body['duration']
-        movie.poster = body['poster']
-        movie.description = body['description']
-        movie.trailer = body['trailer']
-        movie.release_date = body['release_date']
-        movie.save()
-
-        return JsonResponse({
-            'message': 'Update movie successfully'
-        }, status=status.HTTP_200_OK)
+        except:
+            return JsonResponse({
+                'message': 'Just exception'
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 # Get genre
 def get_genre(request):
@@ -136,7 +145,7 @@ def get_genre(request):
         data = []
         for genre in all_genre:
             data.append(dict(zip(fields, genre)))
-        return JsonResponse({'data' : data})
+        return JsonResponse({'data' : data}, status=status.HTTP_200_OK)
 
 # Create genre
 def add_genre(request):
@@ -162,7 +171,7 @@ def update_genre(request):
         if _id is None:
             return JsonResponse({
                 'message': 'No genre selected'
-            }, status=status.HTTP_200_OK)
+            }, status=status.HTTP_400_BAD_REQUEST)
         
         try:
             genre = Genre.objects.get(_id=_id)
@@ -171,7 +180,7 @@ def update_genre(request):
         except:
             return JsonResponse({
                 'message': 'No genre existed'
-            }, status=status.HTTP_200_OK)
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         return JsonResponse({
             'message': 'Update genre successfully'
