@@ -8,6 +8,21 @@ import ast
 import json
 from django.db import connection
 import requests
+import base64
+
+def check_token(token):
+    payload = base64.b64decode(token)
+    x = ''.join(map(chr, list(payload)))
+    
+    auth = {}
+    for role in ['ROLE_EMPLOYEE', 'ROLE_GUEST', 'ROLE_ADMIN']:
+        if role in x:
+            auth['ROLE'] = role
+            break
+    for action in ['CREATE', 'READ', 'UPDATE', 'DELETE']:
+        auth[action] = True if action in x else False
+
+    return auth
 
 def run_sql(statement):
     with connection.cursor() as cursor:
@@ -55,6 +70,23 @@ def get_movie(request):
 # Create movie
 def add_movie(request):
     if request.method == 'POST':
+        try:
+            auth = check_token(request.headers['x-access-token'])
+        except:
+            return JsonResponse({
+                'message': 'Mising auth token'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if auth['ROLE'] == 'ROLE_EMPLOYEE' or auth['ROLE'] == 'ROLE_ADMIN':
+            return JsonResponse({
+                'message': 'Permission denied'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not auth['CREATE']:
+            return JsonResponse({
+                'message': 'CREATE permission denied'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         body = json.loads(request.body)
         genres = body['genre_ids']
         try:
@@ -113,6 +145,23 @@ def add_movie(request):
 # Update movie
 def update_movie(request):
     if request.method == 'POST':
+        try:
+            auth = check_token(request.headers['x-access-token'])
+        except:
+            return JsonResponse({
+                'message': 'Mising auth token'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if auth['ROLE'] == 'ROLE_EMPLOYEE' or auth['ROLE'] == 'ROLE_ADMIN':
+            return JsonResponse({
+                'message': 'Permission denied'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not auth['UPDATE']:
+            return JsonResponse({
+                'message': 'UPDATE permission denied'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         body = json.loads(request.body)
         _id = body['id']
         genres = body['genre_ids']
@@ -164,7 +213,7 @@ def update_movie(request):
 def get_genre(request):
     if request.method == 'GET':
         fields = ['id', 'genre_name']
-        statement = "SELECT * FROM movie_app_genre"
+        statement = "SELECT _id, genre_name FROM movie_app_genre"
 
         all_genre = run_sql(statement)        
         data = []
@@ -175,6 +224,23 @@ def get_genre(request):
 # Create genre
 def add_genre(request):
     if request.method == 'POST':
+        try:
+            auth = check_token(request.headers['x-access-token'])
+        except:
+            return JsonResponse({
+                'message': 'Mising auth token'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if auth['ROLE'] == 'ROLE_EMPLOYEE' or auth['ROLE'] == 'ROLE_ADMIN':
+            return JsonResponse({
+                'message': 'Permission denied'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not auth['CREATE']:
+            return JsonResponse({
+                'message': 'CREATE permission denied'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         body = json.loads(request.body)
         try:
             genre = Genre.objects.create(genre_name=body['genre_name'])
@@ -190,6 +256,23 @@ def add_genre(request):
 # Update genre
 def update_genre(request):
     if request.method == 'POST':
+        try:
+            auth = check_token(request.headers['x-access-token'])
+        except:
+            return JsonResponse({
+                'message': 'Mising auth token'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        if auth['ROLE'] == 'ROLE_EMPLOYEE' or auth['ROLE'] == 'ROLE_ADMIN':
+            return JsonResponse({
+                'message': 'Permission denied'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not auth['UPDATE']:
+            return JsonResponse({
+                'message': 'UPDATE permission denied'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         body = json.loads(request.body)
         _id = body['id']
         print(_id)
@@ -210,27 +293,3 @@ def update_genre(request):
         return JsonResponse({
             'message': 'Update genre successfully'
         }, status=status.HTTP_200_OK)
-
-# Create movie_genre
-# def create_movie_genre(request):
-#     if request.method == 'POST':
-#         body = json.loads(request.body)
-#         try:
-#             movie_id = body['movie_id']
-#             genre_id = body['genre_id']
-#         except KeyError:
-#             return JsonResponse({
-#                 'message': 'Missing key to create movie_genre'
-#             }, status=status.HTTP_400_BAD_REQUEST)
-        
-#         try:
-#             movie_genre = Movie_Genre.objects.create(movie_id=Movie(_id=movie_id), genre_id=Genre(_id=genre_id))
-#         except:
-#             return JsonResponse({
-#                 'message': 'Missing key to create genre'
-#             }, status=status.HTTP_400_BAD_REQUEST)
-
-#         return JsonResponse({
-#             'message': 'Add movie_genre successfully'
-#         }, status=status.HTTP_201_CREATED)
-        
