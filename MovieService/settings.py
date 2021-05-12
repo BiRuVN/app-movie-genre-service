@@ -127,6 +127,7 @@ USE_L10N = True
 USE_TZ = True
 
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = False
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'x-access-token',
