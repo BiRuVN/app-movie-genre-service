@@ -71,7 +71,7 @@ def get_movie(request):
 def add_movie(request):
     if request.method == 'POST':
         try:
-            auth = check_token(request.headers['x-access-token'])
+            auth = check_token(request.headers['authorization'])
         except:
             return JsonResponse({
                 'message': 'Mising auth token'
@@ -146,7 +146,7 @@ def add_movie(request):
 def update_movie(request):
     if request.method == 'POST':
         try:
-            auth = check_token(request.headers['x-access-token'])
+            auth = check_token(request.headers['authorization'])
         except:
             return JsonResponse({
                 'message': 'Mising auth token'
@@ -225,7 +225,7 @@ def get_genre(request):
 def add_genre(request):
     if request.method == 'POST':
         try:
-            auth = check_token(request.headers['x-access-token'])
+            auth = check_token(request.headers['authorization'])
         except:
             return JsonResponse({
                 'message': 'Mising auth token'
@@ -257,7 +257,7 @@ def add_genre(request):
 def update_genre(request):
     if request.method == 'POST':
         try:
-            auth = check_token(request.headers['x-access-token'])
+            auth = check_token(request.headers['authorization'])
         except:
             return JsonResponse({
                 'message': 'Mising auth token'
