@@ -77,7 +77,7 @@ def add_movie(request):
                 'message': 'Mising auth token'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if auth['ROLE'] == 'ROLE_EMPLOYEE' or auth['ROLE'] == 'ROLE_ADMIN':
+        if not (auth['ROLE'] == 'ROLE_EMPLOYEE' or auth['ROLE'] == 'ROLE_ADMIN'):
             return JsonResponse({
                 'message': 'Permission denied'
             }, status=status.HTTP_400_BAD_REQUEST)
@@ -152,7 +152,7 @@ def update_movie(request):
                 'message': 'Mising auth token'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if auth['ROLE'] == 'ROLE_EMPLOYEE' or auth['ROLE'] == 'ROLE_ADMIN':
+        if not (auth['ROLE'] == 'ROLE_EMPLOYEE' or auth['ROLE'] == 'ROLE_ADMIN'):
             return JsonResponse({
                 'message': 'Permission denied'
             }, status=status.HTTP_400_BAD_REQUEST)
@@ -231,7 +231,7 @@ def add_genre(request):
                 'message': 'Mising auth token'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if auth['ROLE'] == 'ROLE_EMPLOYEE' or auth['ROLE'] == 'ROLE_ADMIN':
+        if not (auth['ROLE'] == 'ROLE_EMPLOYEE' or auth['ROLE'] == 'ROLE_ADMIN'):
             return JsonResponse({
                 'message': 'Permission denied'
             }, status=status.HTTP_400_BAD_REQUEST)
@@ -263,7 +263,7 @@ def update_genre(request):
                 'message': 'Mising auth token'
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        if auth['ROLE'] == 'ROLE_EMPLOYEE' or auth['ROLE'] == 'ROLE_ADMIN':
+        if not (auth['ROLE'] == 'ROLE_EMPLOYEE' or auth['ROLE'] == 'ROLE_ADMIN'):
             return JsonResponse({
                 'message': 'Permission denied'
             }, status=status.HTTP_400_BAD_REQUEST)
