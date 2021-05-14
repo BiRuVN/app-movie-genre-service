@@ -43,7 +43,12 @@ def serialize(querysetObject, fields=()):
 # Get all movies
 def get_movie(request):
     if request.method == 'GET':
-        _id = request.GET.get('id', None)
+        try:
+            _id = request.GET.get('id', None)
+        except:
+            return JsonResponse({
+                'message': 'Error when get id'
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         fields = []
         statement = []
