@@ -41,12 +41,7 @@ def serialize(querysetObject, fields=()):
 # Get all movies
 def get_movie(request):
     if request.method == 'GET':
-        try:
-            _id = request.GET.get('id', None)
-        except:
-            return JsonResponse({
-                'message': 'Error when get id'
-            }, status=status.HTTP_400_BAD_REQUEST)
+        _id = request.GET.get('id', None)
 
         fields = []
         statement = []
@@ -66,20 +61,12 @@ def get_movie(request):
                             FULL JOIN movie_app_movie ON movie_app_movie_genre.movie_id_id = movie_app_movie._id) \
                                 WHERE movie_app_movie._id={} \
                                 GROUP BY {}, {}, {}, {}, {}, {}, {}'.format("movie_app_movie._id", *fields[1:], str(_id), *fields[1:-1], "movie_app_movie._id")
-        try:
-            all_movies = run_sql(statement)
-        except:
-            return JsonResponse({
-                'message': 'Error when query db'
-            }, status=status.HTTP_400_BAD_REQUEST)     
+        
+        all_movies = run_sql(statement)
+   
         data = []
-        try:
-            for movie in all_movies:
-                data.append(dict(zip(fields, movie)))
-        except:
-            return JsonResponse({
-                'message': 'Error when append movie'
-            }, status=status.HTTP_400_BAD_REQUEST)
+        for movie in all_movies:
+            data.append(dict(zip(fields, movie)))
 
         return JsonResponse({'data' : data}, status=status.HTTP_200_OK)
         
