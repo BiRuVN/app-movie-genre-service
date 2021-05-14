@@ -9,8 +9,6 @@ import json
 from django.db import connection
 import requests
 import base64
-import jwt
-
 
 def check_token(token):
     token += "=" * ((4 - len(token) % 4) % 4)
