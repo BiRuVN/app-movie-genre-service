@@ -70,8 +70,14 @@ def get_movie(request):
                 'message': 'Error when query db'
             }, status=status.HTTP_400_BAD_REQUEST)     
         data = []
-        for movie in all_movies:
-            data.append(dict(zip(fields, movie)))
+        try:
+            for movie in all_movies:
+                data.append(dict(zip(fields, movie)))
+        except:
+            return JsonResponse({
+                'message': 'Error when append movie'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         return JsonResponse({'data' : data}, status=status.HTTP_200_OK)
         
 # Create movie
