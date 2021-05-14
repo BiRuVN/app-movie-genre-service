@@ -63,8 +63,12 @@ def get_movie(request):
                             FULL JOIN movie_app_movie ON movie_app_movie_genre.movie_id_id = movie_app_movie._id) \
                                 WHERE movie_app_movie._id={} \
                                 GROUP BY {}, {}, {}, {}, {}, {}, {}'.format("movie_app_movie._id", *fields[1:], str(_id), *fields[1:-1], "movie_app_movie._id")
-
-        all_movies = run_sql(statement)        
+        try:
+            all_movies = run_sql(statement)
+        except:
+            return JsonResponse({
+                'message': 'Error when query db'
+            }, status=status.HTTP_400_BAD_REQUEST)     
         data = []
         for movie in all_movies:
             data.append(dict(zip(fields, movie)))
