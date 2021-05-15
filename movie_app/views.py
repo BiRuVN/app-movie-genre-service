@@ -253,7 +253,7 @@ def add_genre(request):
 
         return JsonResponse({
             'data': {
-                'genre_id': genre._id,
+                'id': genre._id,
                 'genre_name': genre.genre_name
             }
         }, status=status.HTTP_201_CREATED)
