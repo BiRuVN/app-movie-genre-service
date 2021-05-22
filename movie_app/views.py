@@ -68,7 +68,11 @@ def get_movie(request):
             data.append(dict(zip(fields, movie)))
 
         return JsonResponse({'data' : data}, status=status.HTTP_200_OK)
-        
+
+# Get all movie income
+def get_movie_income(request):
+    pass
+
 # Create movie
 def add_movie(request):
     if request.method == 'POST':
