@@ -71,10 +71,6 @@ def get_movie(request):
 
         return JsonResponse({'data' : data}, status=status.HTTP_200_OK)
 
-# Get all movie income
-def get_movie_income(request):
-    pass
-
 # Create movie
 def add_movie(request):
     if request.method == 'POST':
@@ -256,6 +252,10 @@ def add_genre(request):
             return JsonResponse({
                 'message': 'Missing key to create genre'
             }, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return JsonResponse({
+                'message': 'Duplicate genre name in database'
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         return JsonResponse({
             'data': {
@@ -298,7 +298,7 @@ def update_genre(request):
             genre.save()
         except:
             return JsonResponse({
-                'message': 'No genre existed'
+                'message': 'Duplicate genre name in database'
             }, status=status.HTTP_400_BAD_REQUEST)
 
         return JsonResponse({
