@@ -21,7 +21,8 @@ def check_token(token):
         if role in x:
             auth['ROLE'] = role
             break
-    for action in ['CREATE', 'READ', 'UPDATE', 'DELETE']:
+    for action in ['MOVIE.READ', 'MOVIE.UPDATE', 'MOVIE.CREATE', 
+                    'GENRE.CREATE', 'GENRE.READ', 'GENRE.UPDATE']:
         auth[action] = True if action in x else False
 
     return auth
@@ -86,7 +87,7 @@ def add_movie(request):
                 'message': 'Permission denied'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        if not auth['CREATE']:
+        if not auth['MOVIE.CREATE']:
             return JsonResponse({
                 'message': 'CREATE permission denied'
             }, status=status.HTTP_400_BAD_REQUEST)
@@ -161,7 +162,7 @@ def update_movie(request):
                 'message': 'Permission denied'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        if not auth['UPDATE']:
+        if not auth['MOVIE.UPDATE']:
             return JsonResponse({
                 'message': 'UPDATE permission denied'
             }, status=status.HTTP_400_BAD_REQUEST)
@@ -240,7 +241,7 @@ def add_genre(request):
                 'message': 'Permission denied'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        if not auth['CREATE']:
+        if not auth['GENRE.CREATE']:
             return JsonResponse({
                 'message': 'CREATE permission denied'
             }, status=status.HTTP_400_BAD_REQUEST)
@@ -279,7 +280,7 @@ def update_genre(request):
                 'message': 'Permission denied'
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        if not auth['UPDATE']:
+        if not auth['GENRE.UPDATE']:
             return JsonResponse({
                 'message': 'UPDATE permission denied'
             }, status=status.HTTP_400_BAD_REQUEST)
