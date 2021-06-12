@@ -44,6 +44,13 @@ def serialize(querysetObject, fields=()):
 def get_movie(request):
     if request.method == 'GET':
         _id = request.GET.get('id', None)
+        getting_status = ''
+        try:
+            auth = check_token(request.headers['authorization'])
+            if (auth['ROLE'] == 'ROLE_EMPLOYEE' or auth['ROLE'] == 'ROLE_ADMIN'):
+                getting_status = ' AND movie_app_movie.status != 1 '
+        except:
+            pass
 
         fields = []
         statement = []
@@ -53,16 +60,16 @@ def get_movie(request):
                     FROM ((movie_app_movie_genre \
                         FULL JOIN movie_app_genre ON movie_app_movie_genre.genre_id_id = movie_app_genre._id) \
                             FULL JOIN movie_app_movie ON movie_app_movie_genre.movie_id_id = movie_app_movie._id) \
-                                WHERE movie_app_movie._id IS NOT NULL \
-                                    GROUP BY {}, {}, {}, {}, {}'.format("movie_app_movie._id", *fields[1:], *fields[1:-1], "movie_app_movie._id")
+                                WHERE movie_app_movie._id IS NOT NULL {} \
+                                    GROUP BY {}, {}, {}, {}, {}'.format("movie_app_movie._id", *fields[1:], getting_status, *fields[1:-1], "movie_app_movie._id")
         else:
             fields = ['movie_id', 'movie_name', 'duration', 'poster', 'release_date', 'trailer', 'description', 'genre_name']
             statement = 'SELECT {}, {}, {}, {}, {}, {}, {}, array_agg({}) \
                     FROM ((movie_app_movie_genre \
                         FULL JOIN movie_app_genre ON movie_app_movie_genre.genre_id_id = movie_app_genre._id) \
                             FULL JOIN movie_app_movie ON movie_app_movie_genre.movie_id_id = movie_app_movie._id) \
-                                WHERE movie_app_movie._id={} \
-                                GROUP BY {}, {}, {}, {}, {}, {}, {}'.format("movie_app_movie._id", *fields[1:], str(_id), *fields[1:-1], "movie_app_movie._id")
+                                WHERE movie_app_movie._id={} {} \
+                                GROUP BY {}, {}, {}, {}, {}, {}, {}'.format("movie_app_movie._id", *fields[1:], str(_id), getting_status, *fields[1:-1], "movie_app_movie._id")
         
         all_movies = run_sql(statement)
    
@@ -97,7 +104,8 @@ def add_movie(request):
         try:
             movie = Movie.objects.create(
                 movie_name=body['movie_name'], duration=body['duration'], poster=body['poster'],
-                release_date=body['release_date'], trailer=body['trailer'], description=body['description']
+                release_date=body['release_date'], trailer=body['trailer'], description=body['description'],
+                status=body['movie_status']
                 )
         except KeyError:
             return JsonResponse({
@@ -189,6 +197,7 @@ def update_movie(request):
             movie.description = body['description']
             movie.trailer = body['trailer']
             movie.release_date = body['release_date']
+            movie.status = body['movie_status']
             movie.save()
             
             try:
