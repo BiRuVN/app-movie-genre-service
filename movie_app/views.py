@@ -35,11 +35,7 @@ def run_sql(statement):
             return row
         cursor.commit()
 
-def serialize(querysetObject, fields=()):
-    return ast.literal_eval(serializers.serialize('json', querysetObject, fields=fields))
-
 # Create your views here.
-
 # Get all movies
 def get_movie(request):
     if request.method == 'GET':
